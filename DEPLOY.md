@@ -125,5 +125,15 @@ git pull
 # git reset --hard origin/main
 # git pull
 
+# 如果需要彻底重新安装（Clean Re-install）：
+# 1. 停止并清理服务
+# docker-compose -f docker-compose.prod.yml down
+# 2. 返回上级目录并删除项目
+# cd .. && rm -rf football
+# 3. 重新克隆
+# git clone <您的仓库地址> football
+# 4. 进入目录并启动
+# cd football && docker-compose -f docker-compose.prod.yml up -d --build
+
 docker-compose -f docker-compose.prod.yml up -d --build
 ```
