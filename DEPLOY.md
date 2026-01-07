@@ -59,11 +59,26 @@ cd football
 
 ## 3. 启动服务
 
+### 3.1 正常启动（推荐）
 在项目根目录下，使用 `docker-compose.prod.yml` 启动服务：
 
 ```bash
 # 构建并后台启动
 docker-compose -f docker-compose.prod.yml up -d --build
+```
+
+### 3.2 如果遇到构建网络问题（DNS错误）
+如果在构建过程中出现 `npm install` 失败（如 `EAI_AGAIN`），请使用以下步骤**手动构建**：
+
+```bash
+# 1. 停止现有服务
+docker-compose -f docker-compose.prod.yml down
+
+# 2. 使用 host 网络手动构建镜像（解决DNS问题）
+docker build --network=host -t football-app .
+
+# 3. 启动服务（使用刚才构建好的镜像）
+docker-compose -f docker-compose.prod.yml up -d
 ```
 
 ## 4. 验证部署
