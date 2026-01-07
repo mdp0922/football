@@ -120,5 +120,10 @@ docker-compose -f docker-compose.prod.yml restart
 
 # 更新代码后重新部署
 git pull
+# 如果遇到冲突（强制覆盖本地修改）：
+# git fetch --all
+# git reset --hard origin/main
+# git pull
+
 docker-compose -f docker-compose.prod.yml up -d --build
 ```
