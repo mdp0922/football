@@ -5,11 +5,12 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json ./
+RUN npm config set registry https://registry.npmmirror.com
 RUN npm ci
 
 # Build the server
 COPY server ./server
-RUN cd server && npm install --legacy-peer-deps && npm run build
+RUN cd server && npm config set registry https://registry.npmmirror.com && npm install --legacy-peer-deps && npm run build
 
 # Copy source code (frontend)
 COPY . .
@@ -24,6 +25,7 @@ WORKDIR /app
 
 # Install production dependencies only (for backend)
 COPY package.json package-lock.json ./
+RUN npm config set registry https://registry.npmmirror.com
 RUN npm ci --omit=dev
 
 # Copy built assets from builder stage
@@ -35,7 +37,7 @@ COPY --from=builder /app/.env ./.env
 RUN mkdir -p uploads
 
 # Install serve to run static frontend (optional, if not using Nginx for static files)
-RUN npm install -g serve pm2
+RUN npm install -g serve pm2 --registry=https://registry.npmmirror.com
 
 # Expose ports (3000 for API)
 EXPOSE 3000
