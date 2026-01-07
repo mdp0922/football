@@ -10,7 +10,7 @@ RUN npm ci
 
 # Build the server
 COPY server ./server
-RUN cd server && npm config set registry https://registry.npmmirror.com && npm install --legacy-peer-deps && npm run build
+RUN cd server && npm config set registry https://registry.npmmirror.com && npm install --legacy-peer-deps && npm install -g @nestjs/cli && npm run build
 
 # Copy source code (frontend)
 COPY . .
