@@ -12,16 +12,16 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
+      - "5432:5432"
 
-  # Backend API & Frontend (Served by NestJS Static or separate Nginx)
+  # Backend API & Frontend
   app:
     build:
       context: .
       network: host
     restart: always
     ports:
-      - "3000:3000"
+      - "80:3000"  # Expose on port 80 for direct access
     dns:
       - 223.5.5.5
       - 8.8.8.8
