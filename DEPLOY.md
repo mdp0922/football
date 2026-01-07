@@ -68,7 +68,20 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 ## 4. 验证部署
 
-- 访问 `http://<您的服务器IP>` 即可看到应用。
+### 4.1 服务器内验证 (Local Check)
+在云服务器终端执行：
+```bash
+# 应该返回 HTML 代码
+curl -v http://localhost
+```
+- 如果返回 `Connection refused`：服务未启动，检查 `docker ps`。
+- 如果返回 HTML 内容：服务正常。
+
+### 4.2 外部验证 (External Check)
+在浏览器访问 `http://<您的服务器IP>`。
+- 如果可以打开：部署成功。
+- 如果打不开但服务器内验证成功：请检查云服务商的**安全组**设置（放行 TCP 80）。
+
 - 接口地址为 `http://<您的服务器IP>/api`。
 
 ## 5. 常见问题排查 (Troubleshooting)
@@ -104,6 +117,26 @@ sudo ufw allow 80/tcp
 ```bash
 docker ps
 # 应该看到类似：0.0.0.0:80->3000/tcp
+```
+
+### 4. Git Clone 报错 SSL 证书问题
+如果出现 `error setting certificate verify locations: CAfile: ...`，说明服务器缺少 CA 证书。
+
+**CentOS:**
+```bash
+yum reinstall -y ca-certificates
+update-ca-trust
+```
+
+**Ubuntu:**
+```bash
+apt-get install --reinstall ca-certificates
+update-ca-certificates
+```
+
+**临时解决方案 (不推荐长期使用):**
+```bash
+git config --global http.sslVerify false
 ```
 
 ## 6. 常用维护命令
