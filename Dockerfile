@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/library/node:20-alpine AS builder
+FROM registry.cn-hangzhou.aliyuncs.com/dockerhub_mirror/node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -29,7 +29,7 @@ ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm run build
 
 # Stage 2: Production image
-FROM swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/library/node:20-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
