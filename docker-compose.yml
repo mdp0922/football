@@ -18,7 +18,6 @@ services:
   app:
     build:
       context: .
-      network: host
     restart: always
     ports:
       - "3000:3000"
