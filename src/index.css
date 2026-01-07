@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+:root {
+  --adm-color-primary: #7c3aed; /* Violet 600 */
+  --color-primary: #7c3aed;
+  --color-secondary: #6d28d9; /* Violet 700 */
+  --color-accent: #f59e0b; /* Amber 500 */
+  --bg-color: #f8fafc; /* Slate 50 */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+body {
+  background-color: var(--bg-color);
+  color: #1f2937;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  touch-action: manipulation;
+  overflow-x: hidden;
+}
+
+/* Custom Utilities */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.primary-gradient {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Ant Design Mobile Overrides for Premium Feel */
+.adm-tab-bar {
+  background-color: transparent !important;
+  border-top: none !important;
+}
+
+.adm-tab-bar-item-active {
+  color: var(--color-primary) !important;
+}
+
+.adm-nav-bar {
+  background-color: transparent !important;
+  border-bottom: none !important;
+}
+
+.adm-card {
+  border-radius: 16px !important;
+  box-shadow: var(--shadow-card) !important;
+  border: none !important;
+}
+
+.adm-button {
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+}
+
+.adm-list-item {
+  background-color: transparent !important;
+}
+
+.adm-list-default {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.adm-list-body {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+/* Fix Toast centering */
+.adm-toast-main {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 12px !important;
+  padding: 16px 24px !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(4px);
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  max-width: 80vw !important;
+  width: auto !important;
+}
+
+.adm-toast-icon {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-bottom: 8px !important;
+  font-size: 24px !important;
+}
+
+/* Uploader fixes */
+.adm-image-uploader-cell,
+.adm-image-uploader-upload-button,
+.adm-image-uploader-cell-upload {
+  border-radius: 12px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background-color: #f1f5f9 !important;
+}
+
+.adm-image-uploader-upload-button-icon {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+/* Scrollbar hiding for clean horizontal scrolls */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
