@@ -8,7 +8,7 @@
 - 操作系统：推荐 Ubuntu 20.04/22.04 或 CentOS 7+
 - 已安装 Docker 和 Docker Compose
 - 开放了必要的端口（安全组规则）：
-  - 80 (HTTP)
+  - 3000 (HTTP/API)
   - 5432 (PostgreSQL，可选，如果不需要外部访问数据库可不开放)
 
 ### 安装 Docker (如果尚未安装)
@@ -87,24 +87,24 @@ docker-compose -f docker-compose.prod.yml up -d
 在云服务器终端执行：
 ```bash
 # 应该返回 HTML 代码
-curl -v http://localhost
+curl -v http://localhost:3000
 ```
 - 如果返回 `Connection refused`：服务未启动，检查 `docker ps`。
 - 如果返回 HTML 内容：服务正常。
 
 ### 4.2 外部验证 (External Check)
-在浏览器访问 `http://<您的服务器IP>`。
+在浏览器访问 `http://<您的服务器IP>:3000`。
 - 如果可以打开：部署成功。
-- 如果打不开但服务器内验证成功：请检查云服务商的**安全组**设置（放行 TCP 80）。
+- 如果打不开但服务器内验证成功：请检查云服务商的**安全组**设置（放行 TCP 3000）。
 
-- 接口地址为 `http://<您的服务器IP>/api`。
+- 接口地址为 `http://<您的服务器IP>:3000/api`。
 
 ## 5. 常见问题排查 (Troubleshooting)
 
 如果访问不了（如连接超时、拒绝连接），请按以下顺序检查：
 
 ### 1. 检查安全组 (Security Group)
-确保云服务商控制台（阿里云/腾讯云）的安全组入方向规则已允许 **80** 端口。
+确保云服务商控制台（阿里云/腾讯云）的安全组入方向规则已允许 **3000** 端口。
 
 ### 2. 检查服务器内部防火墙
 即使安全组开了，服务器操作系统内部的防火墙也可能拦截。
@@ -113,8 +113,8 @@ curl -v http://localhost
 ```bash
 # 查看状态
 systemctl status firewalld
-# 开放 80 端口
-firewall-cmd --zone=public --add-port=80/tcp --permanent
+# 开放 3000 端口
+firewall-cmd --zone=public --add-port=3000/tcp --permanent
 # 重载配置
 firewall-cmd --reload
 ```
@@ -123,15 +123,15 @@ firewall-cmd --reload
 ```bash
 # 查看状态
 sudo ufw status
-# 开放 80 端口
-sudo ufw allow 80/tcp
+# 开放 3000 端口
+sudo ufw allow 3000/tcp
 ```
 
 ### 3. 检查容器状态
 确认容器正在运行且端口映射正确：
 ```bash
 docker ps
-# 应该看到类似：0.0.0.0:80->3000/tcp
+# 应该看到类似：0.0.0.0:3000->3000/tcp
 ```
 
 ### 4. Git Clone 报错 SSL 证书问题

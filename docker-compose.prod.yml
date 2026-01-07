@@ -12,7 +12,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
-      - "5433:5432"
+      - "5432:5432"
 
   # Backend API & Frontend
   app:
@@ -20,7 +20,7 @@ services:
       context: .
     restart: always
     ports:
-      - "80:3000"  # Expose on port 80 for direct access
+      - "3000:3000"  # Expose on port 3000
     dns:
       - 223.5.5.5
       - 8.8.8.8
