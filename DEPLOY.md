@@ -13,6 +13,23 @@
 
 ### 安装 Docker (如果尚未安装)
 
+**Alibaba Cloud Linux (Alinux):**
+这是因为官方脚本不识别 alinux 发行版。请使用以下命令安装：
+```bash
+# 1. 添加 Docker 源
+sudo wget -O /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+# 2. 安装必要插件 (Alinux 3)
+sudo dnf -y install dnf-plugin-releasever-adapter --repo alinux3-plus
+
+# 3. 安装 Docker
+sudo dnf -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# 4. 启动 Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+
 **Ubuntu:**
 ```bash
 curl -fsSL https://get.docker.com | bash
