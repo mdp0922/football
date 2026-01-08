@@ -83,6 +83,8 @@ export class CommunityService {
         );
       }
     }
+    // Force TypeORM to detect change in simple-array
+    post.likes = [...post.likes];
     return this.postRepository.save(post);
   }
 
@@ -113,6 +115,8 @@ export class CommunityService {
       replyToName: replyToUser ? replyToUser.name : undefined
     };
     post.comments.push(comment);
+    // Force TypeORM to detect change in simple-json
+    post.comments = [...post.comments];
 
     // Notify
     if (replyToId && replyToUser) {
