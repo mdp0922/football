@@ -86,7 +86,8 @@ export class TeamsService {
           teamData.captain.avatar = captainWithProfile.avatar;
           
           const sp = captainWithProfile.sportsProfile || {};
-          teamData.captain.footballAge = sp.age;
+          teamData.captain.footballAge = sp.footballAge;
+          teamData.captain.age = sp.age;
           teamData.captain.position = this.formatPosition(sp.position);
         }
       } catch (e) {
@@ -118,7 +119,8 @@ export class TeamsService {
          name: m.name,
          avatar: m.avatar,
          jerseyNumber: m.jerseyNumber,
-         footballAge: sp.age,
+         footballAge: sp.footballAge,
+         age: sp.age,
          position: this.formatPosition(sp.position)
        };
     });

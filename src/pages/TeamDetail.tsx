@@ -408,10 +408,12 @@ const TeamDetail: React.FC = () => {
                        <span className="bg-yellow-100 text-yellow-700 text-xs px-1.5 py-0.5 rounded font-normal">队长</span>
                     </div>
                     <div className="text-xs text-gray-400">
-                      {captainDetails?.footballAge ? `${captainDetails.footballAge}年球龄` : ''} 
-                      {(captainDetails?.footballAge && (team.memberRoles?.[captainDetails?.id] || captainDetails?.position || '创始人')) ? ' | ' : ''}
-                      {team.memberRoles?.[captainDetails?.id] || translatePosition(captainDetails?.position) || '创始人'}
-                      {(captainDetails?.jerseyNumber !== undefined && captainDetails?.jerseyNumber !== null) && ` | #${captainDetails.jerseyNumber}`}
+                      {[
+                        captainDetails?.footballAge ? `${captainDetails.footballAge}年球龄` : null,
+                        team.memberRoles?.[captainDetails?.id] || translatePosition(captainDetails?.position) || '创始人',
+                        (captainDetails?.jerseyNumber !== undefined && captainDetails?.jerseyNumber !== null) ? `#${captainDetails.jerseyNumber}` : null,
+                        captainDetails?.age ? `${captainDetails.age}岁` : null
+                      ].filter(Boolean).join(' | ')}
                     </div>
                   </div>
                 </div>
@@ -427,11 +429,12 @@ const TeamDetail: React.FC = () => {
                          {team.admins?.includes(member.id) && <span className="bg-violet-100 text-violet-700 text-xs px-1.5 py-0.5 rounded font-normal">管理员</span>}
                       </div>
                       <div className="text-xs text-gray-400">
-                        {member.footballAge ? `${member.footballAge}年球龄` : ''}
-                        {(member.footballAge && (team.memberRoles?.[member.id] || member.position || '成员')) ? ' | ' : ''}
-                        {team.memberRoles?.[member.id] || translatePosition(member.position) || '成员'}
-                        {(member.jerseyNumber !== undefined && member.jerseyNumber !== null) && ` | #${member.jerseyNumber}`}
-                        {member.age && ` | ${member.age}岁`}
+                        {[
+                          member.footballAge ? `${member.footballAge}年球龄` : null,
+                          team.memberRoles?.[member.id] || translatePosition(member.position) || '成员',
+                          (member.jerseyNumber !== undefined && member.jerseyNumber !== null) ? `#${member.jerseyNumber}` : null,
+                          member.age ? `${member.age}岁` : null
+                        ].filter(Boolean).join(' | ')}
                       </div>
                     </div>
                   </div>
@@ -708,6 +711,7 @@ const TeamDetail: React.FC = () => {
         visible={datePickerVisible}
         onClose={() => setDatePickerVisible(false)}
         max={new Date()}
+        min={honorFormVisible ? undefined : new Date('1900-01-01')}
         onConfirm={v => {
           if (honorFormVisible) {
             honorForm.setFieldsValue({ date: v })

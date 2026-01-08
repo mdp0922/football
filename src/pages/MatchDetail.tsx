@@ -115,10 +115,35 @@ const MatchDetail: React.FC = () => {
       } as any)
       setMyTeam(res)
       setTeamMembers(res.members || [])
-    } catch (e) {
+    } catch (e: any) {
       console.warn('Fetch my team failed, possibly deleted', e)
-      // If team not found, maybe clear it from local user state?
-      // For now just ignore
+      
+      // If team not found (404), auto-fix the dirty data
+      if (e.response && e.response.status === 404) {
+          try {
+              // 1. Update backend to clear teamId
+              await request.put('/user/profile', { teamId: null })
+              
+              // 2. Update local storage
+              const userStr = localStorage.getItem('user')
+              if (userStr) {
+                  const user = JSON.parse(userStr)
+                  user.teamId = null
+                  localStorage.setItem('user', JSON.stringify(user))
+              }
+              
+              // 3. Notify user
+              Toast.show({
+                  content: '您所在的球队已不存在，已自动更新状态',
+                  icon: 'success'
+              })
+              
+              // 4. Update local state
+              setMyTeam(null)
+          } catch (updateError) {
+              console.error('Failed to auto-fix team status', updateError)
+          }
+      }
     }
   }
 

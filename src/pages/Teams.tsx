@@ -297,6 +297,7 @@ const Teams: React.FC = () => {
         visible={datePickerVisible}
         onClose={() => setDatePickerVisible(false)}
         max={new Date()}
+        min={new Date('1900-01-01')}
         onConfirm={v => {
           form.setFieldsValue({ establishmentDate: v })
         }}

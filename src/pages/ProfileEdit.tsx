@@ -147,13 +147,14 @@ const ProfileEdit: React.FC = () => {
 
       const updateData = {
         ...values,
+        jerseyNumber: values.jerseyNumber ? parseInt(values.jerseyNumber) : null,
         sportsProfile: {
              ...user?.sportsProfile,
-             height: values.height,
-             weight: values.weight,
-             age: values.age,
+             height: values.height ? parseInt(values.height) : null,
+             weight: values.weight ? parseInt(values.weight) : null,
+             age: values.age ? parseInt(values.age) : null,
              position: positionStr,
-             footballAge: values.footballAge,
+             footballAge: values.footballAge ? parseInt(values.footballAge) : null,
              intro: values.intro
         },
         avatar: fileList.length > 0 ? fileList[0].url : avatar,

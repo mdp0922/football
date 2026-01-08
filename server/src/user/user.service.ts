@@ -67,7 +67,21 @@ export class UserService {
 
     // 如果更新了五芒星数据，重置审核状态
     if (allowedUpdates.radarData) {
-      user.radarDataStatus = 'pending';
+      const currentRadar = user.radarData || {};
+      const newRadar = allowedUpdates.radarData;
+      
+      // Check if values actually changed
+      const hasChanged = 
+        currentRadar.speed !== newRadar.speed ||
+        currentRadar.shooting !== newRadar.shooting ||
+        currentRadar.passing !== newRadar.passing ||
+        currentRadar.dribbling !== newRadar.dribbling ||
+        currentRadar.defense !== newRadar.defense ||
+        currentRadar.physical !== newRadar.physical;
+
+      if (hasChanged) {
+        user.radarDataStatus = 'pending';
+      }
     }
 
     Object.assign(user, allowedUpdates);
