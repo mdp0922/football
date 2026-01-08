@@ -44,10 +44,12 @@ request.interceptors.response.use(
         msg = JSON.stringify(msg)
     }
 
-    Toast.show({
-      content: msg,
-      icon: 'fail',
-    })
+    if (!error.config?.skipErrorHandler) {
+      Toast.show({
+        content: msg,
+        icon: 'fail',
+      })
+    }
     
     if (error.response?.status === 401) {
       const isLoginRequest = error.config?.url?.includes('/auth/login')

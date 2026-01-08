@@ -6,12 +6,14 @@ import { Calendar, Users, MapPin, Edit3, Trash2, Clock, Shield, Share2, ChevronL
 import request from '../utils/request'
 import dayjs from 'dayjs'
 import { getUser, checkLogin } from '../utils/auth'
+import ShareMatchModal from '../components/ShareMatchModal'
 
 const MatchDetail: React.FC = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const [match, setMatch] = useState<any>(null)
   const [editVisible, setEditVisible] = useState(false)
+  const [shareVisible, setShareVisible] = useState(false)
   const [editForm] = Form.useForm()
   const [startPickerVisible, setStartPickerVisible] = useState(false)
   const [endPickerVisible, setEndPickerVisible] = useState(false)
@@ -108,11 +110,15 @@ const MatchDetail: React.FC = () => {
 
   const fetchMyTeam = async () => {
     try {
-      const res: any = await request.get(`/teams/${currentUser.teamId}`)
+      const res: any = await request.get(`/teams/${currentUser.teamId}`, {
+        skipErrorHandler: true
+      } as any)
       setMyTeam(res)
       setTeamMembers(res.members || [])
     } catch (e) {
-      console.error(e)
+      console.warn('Fetch my team failed, possibly deleted', e)
+      // If team not found, maybe clear it from local user state?
+      // For now just ignore
     }
   }
 
@@ -487,7 +493,7 @@ const MatchDetail: React.FC = () => {
                         </div>
                     </>
                 )}
-                 <div className="w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white cursor-pointer">
+                 <div className="w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white cursor-pointer" onClick={() => setShareVisible(true)}>
                     <Share2 size={16} />
                 </div>
             </div>
@@ -948,6 +954,12 @@ const MatchDetail: React.FC = () => {
       ]} />
 
       <SearchUserModal visible={searchUserVisible} onClose={() => setSearchUserVisible(false)} onSelect={onAddPlayer} teamMembers={teamMembers} />
+      
+      <ShareMatchModal 
+        visible={shareVisible} 
+        onClose={() => setShareVisible(false)} 
+        match={match} 
+      />
     </div>
   )
 }

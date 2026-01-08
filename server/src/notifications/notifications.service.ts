@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Notification, NotificationType } from './entities/notification.entity';
@@ -9,11 +9,19 @@ export class NotificationsService {
   constructor(
     @InjectRepository(Notification)
     private notificationRepository: Repository<Notification>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
   async create(userId: string, title: string, content: string, type: NotificationType, relatedId?: string) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      console.warn(`User with id ${userId} not found, skipping notification.`);
+      return;
+    }
+
     const notification = this.notificationRepository.create({
-      user: { id: userId } as User,
+      user,
       title,
       content,
       type,

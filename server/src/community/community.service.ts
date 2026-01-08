@@ -84,9 +84,12 @@ export class CommunityService {
       }
     }
     
-    // 使用 update 强制更新，避免 TypeORM 变更检测失效导致的 UpdateValuesMissingError
-    // 注意：TypeORM update 方法不会自动更新 updatedAt，这里手动更新一下，虽然不是必须的
-    await this.postRepository.update(postId, { likes: post.likes });
+    // 使用 queryBuilder 更新，避免 update 方法可能的问题
+    await this.postRepository.createQueryBuilder()
+      .update(Post)
+      .set({ likes: post.likes })
+      .where("id = :id", { id: postId })
+      .execute();
     
     // 返回更新后的对象
     return { ...post };
@@ -143,8 +146,12 @@ export class CommunityService {
       );
     }
     
-    // 使用 update 强制更新
-    await this.postRepository.update(postId, { comments: post.comments });
+    // 使用 queryBuilder 更新
+    await this.postRepository.createQueryBuilder()
+      .update(Post)
+      .set({ comments: post.comments })
+      .where("id = :id", { id: postId })
+      .execute();
     
     return { ...post };
   }
