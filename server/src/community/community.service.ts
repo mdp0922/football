@@ -83,9 +83,12 @@ export class CommunityService {
         );
       }
     }
-    // Force TypeORM to detect change in simple-array
-    post.likes = [...post.likes];
-    return this.postRepository.save(post);
+    
+    // 使用 update 强制更新，避免 TypeORM 变更检测失效导致的 UpdateValuesMissingError
+    await this.postRepository.update(postId, { likes: post.likes });
+    
+    // 更新内存中的对象以返回（如果需要）
+    return post;
   }
 
   async comment(userId: string, postId: number, content: string, replyToId?: string) {
@@ -115,8 +118,6 @@ export class CommunityService {
       replyToName: replyToUser ? replyToUser.name : undefined
     };
     post.comments.push(comment);
-    // Force TypeORM to detect change in simple-json
-    post.comments = [...post.comments];
 
     // Notify
     if (replyToId && replyToUser) {
@@ -141,7 +142,10 @@ export class CommunityService {
       );
     }
     
-    return this.postRepository.save(post);
+    // 使用 update 强制更新
+    await this.postRepository.update(postId, { comments: post.comments });
+    
+    return post;
   }
 
   async delete(userId: string, postId: number) {
