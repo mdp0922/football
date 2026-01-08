@@ -85,10 +85,11 @@ export class CommunityService {
     }
     
     // 使用 update 强制更新，避免 TypeORM 变更检测失效导致的 UpdateValuesMissingError
+    // 注意：TypeORM update 方法不会自动更新 updatedAt，这里手动更新一下，虽然不是必须的
     await this.postRepository.update(postId, { likes: post.likes });
     
-    // 更新内存中的对象以返回（如果需要）
-    return post;
+    // 返回更新后的对象
+    return { ...post };
   }
 
   async comment(userId: string, postId: number, content: string, replyToId?: string) {
@@ -145,7 +146,7 @@ export class CommunityService {
     // 使用 update 强制更新
     await this.postRepository.update(postId, { comments: post.comments });
     
-    return post;
+    return { ...post };
   }
 
   async delete(userId: string, postId: number) {
