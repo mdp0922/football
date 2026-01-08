@@ -24,10 +24,10 @@ export class UploadController {
   uploadFile(@UploadedFile() file: Express.Multer.File, @Req() req: Request) {
     const protocol = req.protocol;
     const host = req.get('host');
-    // 兼容 Docker/Nginx 环境：如果经过了 Nginx 代理，host 可能是 api.example.com
-    // 返回相对路径或绝对路径均可，推荐返回完整 URL
+    // 返回相对路径，让浏览器自动处理域名和端口
+    // 这样可以避免因 Nginx 代理或 Docker 网络导致的 Host 不一致问题
     return {
-      url: `${protocol}://${host}/uploads/${file.filename}`,
+      url: `/uploads/${file.filename}`,
     };
   }
 }
