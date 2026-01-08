@@ -3,12 +3,17 @@ import { Toast } from 'antd-mobile'
 
 const request = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api', 
-  timeout: 5000,
+  timeout: 15000, // Increase timeout to 15s for slow networks
 })
 
 // 请求拦截器
 request.interceptors.request.use(
   config => {
+    // Check network status
+    if (!window.navigator.onLine) {
+        Toast.show({ content: '网络连接已断开，请检查网络设置', icon: 'fail' })
+        return Promise.reject(new Error('Network offline'))
+    }
     const token = localStorage.getItem('token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
@@ -45,6 +50,13 @@ request.interceptors.response.use(
     }
 
     if (!error.config?.skipErrorHandler) {
+      // Improve error message for network/timeout
+      if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+          msg = '请求超时，请检查网络连接'
+      } else if (error.message === 'Network Error') {
+          msg = '网络错误，无法连接到服务器'
+      }
+      
       Toast.show({
         content: msg,
         icon: 'fail',
