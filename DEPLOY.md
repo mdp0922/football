@@ -76,12 +76,22 @@ cd football
 
 ## 3. 启动服务
 
+> **注意：** 
+> 如果您是通过 `apt` / `yum` / `dnf` 安装的 Docker（包含 `docker-compose-plugin`），请使用 **`docker compose`** 命令（中间是空格）。
+> 如果您是手动下载的二进制文件，请使用 **`docker-compose`** 命令（中间是连字符）。
+>
+> **如果遇到 `Segmentation fault` 错误：**
+> 这通常是因为手动下载的 `docker-compose` 二进制文件与系统不兼容。请删除它 (`sudo rm /usr/local/bin/docker-compose`)，然后使用 `docker compose` 命令。
+
 ### 3.1 正常启动（推荐）
 在项目根目录下，使用 `docker-compose.prod.yml` 启动服务：
 
 ```bash
-# 构建并后台启动
-docker-compose -f docker-compose.prod.yml up -d --build
+# 构建并后台启动 (推荐使用新版命令)
+docker compose -f docker-compose.prod.yml up -d --build
+
+# 或者旧版命令
+# docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
 ### 3.2 如果遇到构建网络问题（DNS错误）
@@ -89,13 +99,13 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 ```bash
 # 1. 停止现有服务
-docker-compose -f docker-compose.prod.yml down
+docker compose -f docker-compose.prod.yml down
 
 # 2. 使用 host 网络手动构建镜像（解决DNS问题）
 docker build --network=host -t football-app .
 
 # 3. 启动服务（使用刚才构建好的镜像）
-docker-compose -f docker-compose.prod.yml up -d
+docker compose -f docker-compose.prod.yml up -d
 ```
 
 ## 4. 验证部署
@@ -175,13 +185,13 @@ git config --global http.sslVerify false
 
 ```bash
 # 查看日志
-docker-compose -f docker-compose.prod.yml logs -f
+docker compose -f docker-compose.prod.yml logs -f
 
 # 停止服务
-docker-compose -f docker-compose.prod.yml down
+docker compose -f docker-compose.prod.yml down
 
 # 重启服务
-docker-compose -f docker-compose.prod.yml restart
+docker compose -f docker-compose.prod.yml restart
 
 # 更新代码后重新部署
 git pull
@@ -192,13 +202,13 @@ git pull
 
 # 如果需要彻底重新安装（Clean Re-install）：
 # 1. 停止并清理服务
-# docker-compose -f docker-compose.prod.yml down --rmi all
+# docker compose -f docker-compose.prod.yml down --rmi all
 # 2. 重新构建并启动
-# docker-compose -f docker-compose.prod.yml up -d --build
+# docker compose -f docker-compose.prod.yml up -d --build
 
 # (可选) 如果需要连数据库数据一起清空：
-# docker-compose -f docker-compose.prod.yml down --rmi all -v
-# docker-compose -f docker-compose.prod.yml up -d --build
+# docker compose -f docker-compose.prod.yml down --rmi all -v
+# docker compose -f docker-compose.prod.yml up -d --build
 
-docker-compose -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml up -d --build
 ```
