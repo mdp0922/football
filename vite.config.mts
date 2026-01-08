@@ -8,6 +8,12 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  build: {
+    target: ['es2015', 'chrome87', 'safari13'],
+    cssTarget: ['chrome87', 'safari13'],
+    outDir: 'dist',
+    sourcemap: false
+  },
   server: {
     host: '0.0.0.0',
     port: 5173,

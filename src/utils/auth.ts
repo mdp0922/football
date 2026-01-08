@@ -17,5 +17,11 @@ export const getToken = () => localStorage.getItem('token')
 
 export const getUser = () => {
   const userStr = localStorage.getItem('user')
-  return userStr ? JSON.parse(userStr) : null
+  try {
+    return userStr ? JSON.parse(userStr) : null
+  } catch (e) {
+    console.error('Parse user info failed:', e)
+    localStorage.removeItem('user')
+    return null
+  }
 }
