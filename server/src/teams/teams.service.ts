@@ -72,12 +72,16 @@ export class TeamsService {
     // Enrich Captain Profile
     if (teamData.captain && teamData.captain.id) {
       try {
+        // Since we used loadRelationIds, teamData.captain.id is the database PK (_id)
+        // We need to find the user by _id and get their public id
         const captainWithProfile = await this.userRepository.findOne({
-          where: { id: teamData.captain.id },
+          where: { _id: teamData.captain.id } as any,
           select: ['id', 'name', 'avatar', 'sportsProfile']
         });
         
         if (captainWithProfile) {
+          // Replace internal PK with public ID
+          teamData.captain.id = captainWithProfile.id;
           teamData.captain.name = captainWithProfile.name;
           teamData.captain.avatar = captainWithProfile.avatar;
           
